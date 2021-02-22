@@ -6,7 +6,7 @@ include('header.php');
     <div class="row">
         <div class="col-12 col-sm-4">
             <h3>Dodawanie nowej restauracji</h3>
-            <form action="vendor/add_rest.php" method="POST" enctype="multipart/form-data">
+            <form action="./vendor/add_rest.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Nazwa</label>
                     <input type="text" class="form-control" name="restaurant_nazwa" placeholder="Enter the name..." required />
@@ -44,13 +44,13 @@ include('header.php');
                 </div>
                 <div class="form-group">
                     <label>Zdjęcia</label>
-                    <input type="file" class="form-control-file" name="img[]" multiple="multiple" required />
+                    <input type="file" class="form-control-file" name="Photo[]" multiple="multiple" required />
                     <small class="form-text text-muted">Maksymalny rozmiar pliku to 3 MB. Dozwolone rozszerzenia: .jpg .jpeg</small>
 
                 </div>
                 <div class="form-group">
                     <label>Opis zdjęcia</label>
-                    <input type="text" class="form-control mb-1 mt-1" name="image_opis" required>
+                    <input type="text" class="form-control mb-1 mt-1" name="image_opis">
                 </div>
                 <button type="submit" class="btn btn-success">Zapisz</button>
             </form>

@@ -12,20 +12,24 @@ if (empty($restaurant['RESTAURANT_ID'])) {
     echo '<h1>Błąd! Wybrana restauracja nie istnieje.</h1>';
     die();
 }
+
+$images = $database->getRows('image', "*");
+// var_dump($images);
 ?>
 
 <div class="container">
     <div class="row">
         <div class="col-12 col-sm-4">
             <h3>Dodawanie nowej restauracji</h3>
-            <form action="process.php?action=addhotel" method="post" enctype="multipart/form-data">
+            <form action="./vendor/edit_rest.php?action=editrest" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="rest_id" class="rest-id" value=<?php echo $id; ?>>
                 <div class="form-group">
                     <label>Nazwa</label>
                     <input type="text" class="form-control" name="restaurant_nazwa" placeholder="Enter the name..." value="<?php echo $restaurant['RESTAURANT_NAZWA']; ?>" required />
                 </div>
                 <div class="form-group">
                     <label>Opis</label>
-                    <textarea class="form-control" name="restaurant_opis" rows="5" value="<?php echo $restaurant['RESTAURANT_OPIS']; ?>" required></textarea>
+                    <textarea class="form-control" name="restaurant_opis" rows="5" required><?php echo $restaurant['RESTAURANT_OPIS']; ?></textarea>
                 </div>
                 <div class="form-group">
                     <label>Adres</label>
@@ -41,7 +45,7 @@ if (empty($restaurant['RESTAURANT_ID'])) {
                 </div>
                 <div class="form-group">
                     <label>Adres strony internetowej</label>
-                    <input type="text" class="form-control" name="restaurant_website" placeholder="http://www.example.com/" value="<?php echo $restaurant['RESTAURANT_WEBSITE']; ?>" required />
+                    <input type="text" class="form-control" name="restaurant_website" placeholder="http://www.example.com/" value="<?php echo $restaurant['RESTAURANT_WEBSITE']; ?>" />
                 </div>
                 <div class="form-group">
                     <label>Miasto</label>
@@ -59,16 +63,42 @@ if (empty($restaurant['RESTAURANT_ID'])) {
                         ?>
                     </select>
                 </div>
+                <div class="img-collection">
+                </div>
                 <div class="form-group">
                     <label>Zdjęcia</label>
-                    <input type="file" class="form-control-file" name="image[]" multiple="multiple" required />
+                    <input type="file" class="form-control-file" name="image[]" multiple="multiple" />
                     <small class="form-text text-muted">Maksymalny rozmiar pliku to 3 MB. Dozwolone rozszerzenia: .jpg .jpeg</small>
+                </div>
+                <div class="form-group">
+                    <label>Opis zdjęcia</label>
+                    <input type="text" class="form-control mb-1 mt-1" name="image_opis">
                 </div>
                 <button type="submit" class="btn btn-success">Zapisz</button>
             </form>
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h2>Zdjęcie</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="popup-body">
+            <img alt="zdjęcie" class="popup-image">
+        </div>
+        <div class="popup-footer">
+            <input type="text" class="form-control description" name="image_opis" placeholder="Dodaj nowy opis...">
+            <div class="popup-footer__buttons">
+                <button class="btn btn-success button-add">Zapisz nowy podpis</button>
+                <button class="btn btn-danger button-delete">Usuń zdjęcie</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="src/js/image_adder.js"></script>
 <?php
 include('footer.php');
 ?>

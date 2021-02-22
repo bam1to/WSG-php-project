@@ -2,10 +2,6 @@
 require_once('../lib/database.php');
 $database = new Database();
 
-// if(!isset($_GET['action']) || empty($_GET['action'])) {
-//     die();
-// }
-
 $data = array(
     "RESTAURANT_NAZWA" => strip_tags($_POST['restaurant_nazwa']),
     "RESTAURANT_OPIS" => strip_tags($_POST['restaurant_opis']),
@@ -17,12 +13,10 @@ $data = array(
 );
 
 $database->insertRows("RESTAURANT", $data);
-$hotel_id = $database->getLastInsertedId();
+$rest_id = $database->getLastInsertedId();
 
-print_r($_FILES);
-$files = $_FILES['image']; // получает сами файлы
-// $imgOpis = $_POST['image_opis'];
-// print_r($imgOpis);
+$files = $_FILES['Photo']; // получает сами файлы
+$imgOpis = $_POST['image_opis'];
 $fileCount = count($files['name']); //устанавливается количество файлов
 
 //запускается цикл проходящий по всем файлам
@@ -35,37 +29,38 @@ for ($i = 0; $i < $fileCount; $i++) {
             if ($files['size'][$i] < 3072000) { //если размер файла меньше чем 3мб, то выполнять код
                 $curTime = time(); //текущее время
                 $newFileName = md5($curTime . $filename) . '.' . $ext; //преобразует текущее время и имя файла в хэш данные для создания уникального имени
-                $newName = 'upload/' . $newFileName; //переменная с путём к новому файлу
+                $newName = '../upload/' . $newFileName; //переменная с путём к новому файлу
                 if (!file_exists($newName)) { //если фала в серверной папке не существует, то...
                     if (move_uploaded_file($files['tmp_name'][$i], $newName)) { //проверяет действительно ли файл $files['tmp_name'][$i] был загружен в $newName
                         $dataImg = array(
                             "IMAGE_NAZWA" => $newFileName,
-                            // "IMAGE_OPIS" => $imgOpis,
-                            "IMAGE_REST" => $hotel_id,
+                            "IMAGE_OPIS" => $imgOpis,
+                            "IMAGE_REST" => $rest_id,
                         );
+                        // print_r($dataImg);
                         $database->insertRows("IMAGE", $dataImg);
                     } else {
-                        header('Location: add_rest.php?error=5');
+                        header('Location: dodaj_rest.php?error=5');
                         exit();
                     }
                 } else {
-                    header('Location: add_rest.php?error=4');
+                    header('Location: dodaj_rest.php?error=4');
                     exit();
                 }
             } else {
-                header('Location: add_rest.php?error=3');
+                header('Location: dodaj_rest.php?error=3');
                 exit();
             }
         } else {
-            header('Location: add_rest.php?error=2');
+            header('Location: dodaj_rest.php?error=2');
             exit();
         }
     } else {
-        header('Location: add_rest.php?error=1');
+        header('Location: dodaj_rest.php?error=1');
         exit();
     }
 }
+// print_r($imgOpis);
 
 
-
-// header('Location: ../index.php');
+header('Location: ../index.php');
